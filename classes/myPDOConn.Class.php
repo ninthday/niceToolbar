@@ -8,7 +8,7 @@
  * @copyright (c) 2014, Jeffy Shih
  */
 
-namespace niceToolbox;
+namespace niceToolbar;
 class myPDOConn {
 
     protected static $instance = NULL;
