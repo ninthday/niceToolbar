@@ -9,9 +9,10 @@
  * @version 1.0
  */
 
-namespace niceToolbar;
+namespace ninthday\niceToolbar;
 
-class URLStatistic {
+class URLStatistic
+{
 
     private $dbh = NULL;
 
@@ -19,10 +20,11 @@ class URLStatistic {
      * 建構子包含連線設定
      * @param \Floodfire\myPDOConn $pdoConn myPDOConn object
      */
-    public function __construct(\niceToolbar\myPDOConn $pdoConn) {
+    public function __construct(\niceToolbar\myPDOConn $pdoConn)
+    {
         $this->dbh = $pdoConn->dbh;
     }
-    
+
     /**
      * 取得資料庫中資料表名稱為 _urls 結尾的資料表名稱，不包含 _urls
      * 
@@ -31,7 +33,8 @@ class URLStatistic {
      * @access public
      * @since version 1.0
      */
-    public function getAllURLTableName() {
+    public function getAllURLTableName()
+    {
         $aryRtn = array();
         $sql = "SHOW TABLES LIKE '%_urls' ";
         try {
@@ -56,7 +59,8 @@ class URLStatistic {
      * @access public
      * @since version 1.0
      */
-    public function getTablesStatus(array $aryTables) {
+    public function getTablesStatus(array $aryTables)
+    {
         $aryRtn = array();
         foreach ($aryTables as $strTableName) {
             $aryDuration = $this->getDuration($strTableName);
@@ -79,7 +83,8 @@ class URLStatistic {
      * @access private
      * @since version 1.0
      */
-    private function getDuration($strTableName) {
+    private function getDuration($strTableName)
+    {
         $sql = "SELECT MIN(`created_at`) AS `begin`, MAX(`created_at`) AS `end` FROM `" . $strTableName . "_urls`";
 
         try {
@@ -103,7 +108,8 @@ class URLStatistic {
      * @return array total: 總筆數, unshorten: 已短網址還原避暑
      * @throws \Exception
      */
-    private function getBasicNum($strTableName) {
+    private function getBasicNum($strTableName)
+    {
         $aryRtn = array();
         try {
             // 取得資料表資料總數
@@ -128,7 +134,8 @@ class URLStatistic {
     /**
      * 解構子歸還資源
      */
-    public function __destruct() {
+    public function __destruct()
+    {
         $this->dbh = NULL;
     }
 
