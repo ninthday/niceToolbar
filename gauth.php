@@ -36,14 +36,23 @@ if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
 //If New, Insert to Database
 if ($gClient->getAccessToken()) {
     $userData = $objOAuthService->userinfo->get();
-//    if (!empty($userData)) {
-//        $objDBController = new DBController();
-//        $existing_member = $objDBController->getUserByOAuthId($userData->id);
-//        if (empty($existing_member)) {
-//            $objDBController->insertOAuthUser($userData);
-//        }
-//    }
-    $_SESSION['access_token'] = $gClient->getAccessToken();
+    try {
+        if (!empty($userData)) {
+            require_once _APP_PATH . 'classes/myPDOConn.Class.php';
+            require_once _APP_PATH . 'classes/Authentication.Class.php';
+            $pdoConn = \ninthday\niceToolbar\myPDOConn::getInstance('myPDOConnConfig.inc.php');
+            $objUserAuth = new \ninthday\niceToolbar\Authentication($pdoConn);
+
+            if ($objUserAuth->isExistandActived($userData)) {
+                $_SESSION['access_token'] = $gClient->getAccessToken();
+                header('Location: index.php');
+            } else {
+                $strMesg = "Your Account is not Active, Please contact adminstrator, thx!";
+            }
+        }
+    } catch (Exception $exc) {
+        echo $exc->getMessage();
+    }
 } else {
     $authUrl = $gClient->createAuthUrl();
 }
@@ -78,6 +87,12 @@ if ($gClient->getAccessToken()) {
                     padding-right: 5px;
                 }
             }
+            .box {font-family: Arial, sans-serif;background-color: #F1F1F1;border:0;width:340px;webkit-box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.3);box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.3);margin: 0 auto 25px;text-align:center;padding:10px 0px;}
+            .box img{padding: 10px 0px;}
+            .box a{color: #427fed;cursor: pointer;text-decoration: none;}
+            .heading {text-align:center;padding:10px;font-family: 'Open Sans', arial;color: #555;font-size: 18px;font-weight: 400;}
+            .circle-image{width:100px;height:100px;-webkit-border-radius: 50%;border-radius: 50%;}
+            .welcome{font-size: 16px;font-weight: bold;text-align: center;margin: 10px 0 0;min-height: 1em;}
         </style>
     </head>
     <body>
@@ -94,10 +109,17 @@ if ($gClient->getAccessToken()) {
                             <img src="images/user_circle.png" width="100px" size="100px" /><br/>
                             <a class='login' href='<?php echo $authUrl; ?>'><img class='login' src="images/sign-in-with-google.png" width="250px" size="54px" /></a>
                             <!-- Show User Profile otherwise-->
-                        <?php else: ?>
+                            <?php
+                        else:
+                            ?>
                             <img class="circle-image" src="<?php echo $userData["picture"]; ?>" width="100px" size="100px" /><br/>
                             <p class="welcome">Welcome <a href="<?php echo $userData["link"]; ?>" /><?php echo $userData["name"]; ?></a>.</p>
-                            <p class="oauthemail"><?php echo $userData["email"]; ?></p>
+                            <?php
+                            if (isset($strMesg)) {
+                                echo '<p class="bg-danger text-danger">' . $strMesg . '</p>';
+                            }
+                            ?>
+                            <p><?php echo $userData["email"]; ?></p>
                             <div class='logout'><a href='?logout'>Logout</a></div>
                         <?php endif ?>
                     </center>
