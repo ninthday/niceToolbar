@@ -14,13 +14,13 @@ namespace ninthday\niceToolbar;
 class URLStatistic
 {
 
-    private $dbh = NULL;
+    private $dbh = null;
 
     /**
      * 建構子包含連線設定
      * @param \Floodfire\myPDOConn $pdoConn myPDOConn object
      */
-    public function __construct(\niceToolbar\myPDOConn $pdoConn)
+    public function __construct(\ninthday\niceToolbar\myPDOConn $pdoConn)
     {
         $this->dbh = $pdoConn->dbh;
     }
@@ -136,7 +136,7 @@ class URLStatistic
      */
     public function __destruct()
     {
-        $this->dbh = NULL;
+        $this->dbh = null;
     }
 
 }
