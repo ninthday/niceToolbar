@@ -120,11 +120,16 @@ class URLStatistic
             $aryRtn['total'] = $rs[0];
 
             // 取得資料表成功反解短網址的數量
-            $sql_code200 = "SELECT COUNT(*) FROM `" . $strTableName . "_urls` WHERE `error_code` = 200";
-            $stmt = $this->dbh->prepare($sql_code200);
+            $sql_stat = "SELECT COUNT(CASE WHEN `error_code` = 200 THEN `id` ELSE NULL END) AS `Done`, " .
+                "COUNT(CASE WHEN `error_code` IS NULL THEN `id` ELSE NULL END) AS `INProc`, ".
+                "COUNT(CASE WHEN `error_code` <> 200 AND `error_code` IS NOT NULL THEN `id` ELSE NULL END) AS `Error` " .
+                "FROM `" . $strTableName . "_urls`";
+            $stmt = $this->dbh->prepare($sql_stat);
             $stmt->execute();
             $rs = $stmt->fetch(\PDO::FETCH_NUM);
             $aryRtn['unshorten'] = $rs[0];
+            $aryRtn['inproc'] = $rs[1];
+            $aryRtn['error'] = $rs[2];
         } catch (\PDOException $exc) {
             throw new \Exception($exc->getMessage());
         }
