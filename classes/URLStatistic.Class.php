@@ -75,6 +75,72 @@ class URLStatistic
     }
 
     /**
+     * 依資料集名稱取得基本統計資料
+     * 
+     * @param string $strTableName
+     * @return array 資料集狀態
+     * @access public
+     * @since version 1.0
+     */
+    public function getStatusByDataset($strTableName)
+    {
+        $aryRtn = array();
+        $aryDuration = $this->getDuration($strTableName);
+        $aryBasic = $this->getBasicNum($strTableName);
+        $aryRtn['duration'] = $aryDuration;
+        $aryRtn['basic'] = $aryBasic;
+        return $aryRtn;
+    }
+
+    public function getDailyFreq($strTableName, $strBeginDay, $strEndDay)
+    {
+        $aryRtn = array();
+        $sql = "SELECT DATE_FORMAT(`created_at`, '%Y-%m-%d') AS `BYDAY`, COUNT(*) AS `CNT` FROM `" . $strTableName . "_urls` " .
+                "WHERE `created_at` > '" . $strBeginDay . " 00:00:00' AND `created_at` <= '" . $strEndDay . " 23:59:59' " .
+                "GROUP BY `BYDAY`";
+        echo $sql;
+        try {
+            $stmt = $this->dbh->prepare($sql);
+            $stmt->execute();
+            while ($row = $stmt->fetch(\PDO::FETCH_NUM)) {
+                array_push(
+                        $aryRtn, array(
+                    strtotime($row[0] . " 00:00:00") * 1000,
+                    $row[1]
+                        )
+                );
+            }
+        } catch (\PDOException $exc) {
+            throw new \Exception($exc->getMessage());
+        }
+        return $aryRtn;
+    }
+
+    public function getHourlyFreq($strTableName, $strBeginDay, $strEndDay)
+    {
+        $aryRtn = array();
+        $sql = "SELECT DATE_FORMAT(`created_at`, '%Y-%m-%d %H:00:00') AS `BYDAY`, COUNT(*) AS `CNT` FROM `" . $strTableName . "_urls` " .
+                "WHERE `created_at` > '" . $strBeginDay . " 00:00:00' AND `created_at` <= '" . $strEndDay . " 23:59:59' " .
+                "GROUP BY `BYDAY`";
+        echo $sql;
+        try {
+            $stmt = $this->dbh->prepare($sql);
+            $stmt->execute();
+            while ($row = $stmt->fetch(\PDO::FETCH_NUM)) {
+                array_push(
+                        $aryRtn, array(
+                    strtotime($row[0]) * 1000,
+                    $row[1]
+                        )
+                );
+            }
+        } catch (\PDOException $exc) {
+            throw new \Exception($exc->getMessage());
+        }
+        return $aryRtn;
+    }
+
+    /**
      * 取得指定資料表最早和最晚一筆的時間
      * 
      * @param type $strTableName 資料表名稱
@@ -116,14 +182,14 @@ class URLStatistic
             $sql_total = "SELECT COUNT(*) FROM `" . $strTableName . "_urls`";
             $stmt = $this->dbh->prepare($sql_total);
             $stmt->execute();
-            $rs = $stmt->fetch(\PDO::FETCH_NUM);
-            $aryRtn['total'] = $rs[0];
+            $rs_total = $stmt->fetch(\PDO::FETCH_NUM);
+            $aryRtn['total'] = $rs_total[0];
 
             // 取得資料表成功反解短網址的數量
             $sql_stat = "SELECT COUNT(CASE WHEN `error_code` = 200 THEN `id` ELSE NULL END) AS `Done`, " .
-                "COUNT(CASE WHEN `error_code` IS NULL THEN `id` ELSE NULL END) AS `INProc`, ".
-                "COUNT(CASE WHEN `error_code` <> 200 AND `error_code` IS NOT NULL THEN `id` ELSE NULL END) AS `Error` " .
-                "FROM `" . $strTableName . "_urls`";
+                    "COUNT(CASE WHEN `error_code` IS NULL THEN `id` ELSE NULL END) AS `INProc`, " .
+                    "COUNT(CASE WHEN `error_code` <> 200 AND `error_code` IS NOT NULL THEN `id` ELSE NULL END) AS `Error` " .
+                    "FROM `" . $strTableName . "_urls`";
             $stmt = $this->dbh->prepare($sql_stat);
             $stmt->execute();
             $rs = $stmt->fetch(\PDO::FETCH_NUM);
