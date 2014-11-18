@@ -41,14 +41,14 @@ try {
         <title><?php echo _WEB_NAME ?></title>
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-        <!-- Optional theme -->
-        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+        
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 
         <!-- Custom styles for this template -->
         <link href="http://getbootstrap.com/examples/dashboard/dashboard.css" rel="stylesheet">
         <link href="style/main.css" rel="stylesheet">
         <link href="resources/bootstrap-datepicker/css/datepicker3.css" rel="stylesheet">
+        <link href="resources/d3/nv.d3.css" rel="stylesheet">
         <style type="text/css">
             body {
                 padding-top: 60px;
@@ -103,35 +103,42 @@ try {
                                     <form class="form-horizontal" role="form">
                                         <div class="form-group">
                                             <label for="duration" class="col-sm-2 control-label">Duration</label>
-                                            <div class="input-daterange input-group" id="datepicker">
-                                                <input type="text" class="input-sm form-control" name="start" />
-                                                <span class="input-group-addon">to</span>
-                                                <input type="text" class="input-sm form-control" name="end" />
+                                            <div class="col-sm-10">
+                                                <div class="input-daterange input-group" id="datepicker">
+                                                    <input type="text" class="input-sm form-control" name="start" />
+                                                    <span class="input-group-addon">to</span>
+                                                    <input type="text" class="input-sm form-control" name="end" />
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label for="resolution" class="col-sm-2 control-label">Resolution</label>
-                                            <label class="radio-inline">
-                                                <input type="radio" name="resolution" id="perdays" value="option1"> days
-                                            </label>
-                                            <label class="radio-inline">
-                                                <input type="radio" name="resolution" id="perhours" value="option1"> hours
-                                            </label>
+                                            <div class="col-sm-10">
+                                                <label class="radio-inline">
+                                                    <input type="radio" name="resolution" id="perdays" value="option1"> days
+                                                </label>
+                                                <label class="radio-inline">
+                                                    <input type="radio" name="resolution" id="perhours" value="option1"> hours
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-sm-offset-2 col-sm-10">
+                                                <button type="submit" class="btn btn-default">Update</button>
+                                            </div>
                                         </div>
                                     </form>
-
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="row placeholders">
-                        <?php
-                        ?>
-                    </div>
-
                     <h2 class="sub-header">Basic statistic</h2>
-                    <div class="table-responsive">
-
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="chart">
+                                <svg></svg>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -153,5 +160,8 @@ try {
                 todayHighlight: true
             });
         </script>
+        <script src="resources/d3/d3.min.js"></script>
+        <script src="resources/d3/nv.d3.min.js"></script>
+        <script src="js/url_statistic_detail.js"></script>
     </body>
 </html>

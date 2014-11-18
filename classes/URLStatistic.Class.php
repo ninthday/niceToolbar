@@ -92,13 +92,22 @@ class URLStatistic
         return $aryRtn;
     }
 
-    public function getDailyFreq($strTableName, $strBeginDay, $strEndDay)
+    /**
+     * 由資料集中取得每日URL頻率統計
+     * 
+     * @param string $strTableName 資料集名稱
+     * @param string $strBeginDay 資料區間開始日期（yyyy-mm-dd）
+     * @param string $strEndDay 資料區間結束日期（yyyy-mm-dd）
+     * @return array
+     * @throws \Exception
+     */
+    public function getDailyURLFreq($strTableName, $strBeginDay, $strEndDay)
     {
         $aryRtn = array();
         $sql = "SELECT DATE_FORMAT(`created_at`, '%Y-%m-%d') AS `BYDAY`, COUNT(*) AS `CNT` FROM `" . $strTableName . "_urls` " .
                 "WHERE `created_at` > '" . $strBeginDay . " 00:00:00' AND `created_at` <= '" . $strEndDay . " 23:59:59' " .
                 "GROUP BY `BYDAY`";
-        echo $sql;
+        
         try {
             $stmt = $this->dbh->prepare($sql);
             $stmt->execute();
@@ -106,7 +115,40 @@ class URLStatistic
                 array_push(
                         $aryRtn, array(
                     strtotime($row[0] . " 00:00:00") * 1000,
-                    $row[1]
+                    (int)$row[1]
+                        )
+                );
+            }
+        } catch (\PDOException $exc) {
+            throw new \Exception($exc->getMessage());
+        }
+        return $aryRtn;
+    }
+    
+    /**
+     * 由資料集中取得每日發文者頻率統計（不重複）
+     * 
+     * @param string $strTableName 資料集名稱
+     * @param string $strBeginDay 資料區間開始日期（yyyy-mm-dd）
+     * @param string $strEndDay 資料區間結束日期（yyyy-mm-dd）
+     * @return array
+     * @throws \Exception
+     */
+    public function getDailyUserFreq($strTableName, $strBeginDay, $strEndDay)
+    {
+        $aryRtn = array();
+        $sql = "SELECT DATE_FORMAT(`created_at`, '%Y-%m-%d') AS `BYDAY`, COUNT(DISTINCT `from_user_id`) AS `CNT` FROM `" . $strTableName . "_urls` " .
+                "WHERE `created_at` > '" . $strBeginDay . " 00:00:00' AND `created_at` <= '" . $strEndDay . " 23:59:59' " .
+                "GROUP BY `BYDAY`";
+        
+        try {
+            $stmt = $this->dbh->prepare($sql);
+            $stmt->execute();
+            while ($row = $stmt->fetch(\PDO::FETCH_NUM)) {
+                array_push(
+                        $aryRtn, array(
+                    strtotime($row[0] . " 00:00:00") * 1000,
+                    (int)$row[1]
                         )
                 );
             }
@@ -116,13 +158,22 @@ class URLStatistic
         return $aryRtn;
     }
 
-    public function getHourlyFreq($strTableName, $strBeginDay, $strEndDay)
+    /**
+     * 由資料集中取得每小時頻率統計
+     * 
+     * @param string $strTableName 資料集名稱
+     * @param string $strBeginDay 資料區間開始日期（yyyy-mm-dd）
+     * @param string $strEndDay 資料區間結束日期（yyyy-mm-dd）
+     * @return array
+     * @throws \Exception
+     */
+    public function getHourlyURLFreq($strTableName, $strBeginDay, $strEndDay)
     {
         $aryRtn = array();
         $sql = "SELECT DATE_FORMAT(`created_at`, '%Y-%m-%d %H:00:00') AS `BYDAY`, COUNT(*) AS `CNT` FROM `" . $strTableName . "_urls` " .
                 "WHERE `created_at` > '" . $strBeginDay . " 00:00:00' AND `created_at` <= '" . $strEndDay . " 23:59:59' " .
                 "GROUP BY `BYDAY`";
-        echo $sql;
+        
         try {
             $stmt = $this->dbh->prepare($sql);
             $stmt->execute();
@@ -130,7 +181,40 @@ class URLStatistic
                 array_push(
                         $aryRtn, array(
                     strtotime($row[0]) * 1000,
-                    $row[1]
+                    (int)$row[1]
+                        )
+                );
+            }
+        } catch (\PDOException $exc) {
+            throw new \Exception($exc->getMessage());
+        }
+        return $aryRtn;
+    }
+    
+    /**
+     * 由資料集中取得每小時發文者頻率統計（不重複）
+     * 
+     * @param string $strTableName 資料集名稱
+     * @param string $strBeginDay 資料區間開始日期（yyyy-mm-dd）
+     * @param string $strEndDay 資料區間結束日期（yyyy-mm-dd）
+     * @return array
+     * @throws \Exception
+     */
+    public function getHourlyUserFreq($strTableName, $strBeginDay, $strEndDay)
+    {
+        $aryRtn = array();
+        $sql = "SELECT DATE_FORMAT(`created_at`, '%Y-%m-%d %H:00:00') AS `BYDAY`, COUNT(DISTINCT `from_user_id`) AS `CNT` FROM `" . $strTableName . "_urls` " .
+                "WHERE `created_at` > '" . $strBeginDay . " 00:00:00' AND `created_at` <= '" . $strEndDay . " 23:59:59' " .
+                "GROUP BY `BYDAY`";
+        
+        try {
+            $stmt = $this->dbh->prepare($sql);
+            $stmt->execute();
+            while ($row = $stmt->fetch(\PDO::FETCH_NUM)) {
+                array_push(
+                        $aryRtn, array(
+                    strtotime($row[0]) * 1000,
+                    (int)$row[1]
                         )
                 );
             }
