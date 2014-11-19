@@ -3,40 +3,112 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+$(document).ready(function () {
+    // 讓 form.submit 的預設事件無效
+    $("form").submit(function (event) {
+        event.preventDefault();
+    });
+
+    var initGraph = function (url) {
+        d3.json(url, function (error, data) {
+            nv.addGraph(function () {
+                var chart = nv.models.linePlusBarChart()
+                        .margin({top: 30, right: 60, bottom: 50, left: 70})
+                        //We can set x data accessor to use index. Reason? So the bars all appear evenly spaced.
+                        .x(function (d, i) {
+                            return i
+                        })
+                        .y(function (d, i) {
+                            return d[1]
+                        })
+                        ;
+
+                chart.xAxis.tickFormat(function (d) {
+                    var dx = data[0].values[d] && data[0].values[d][0] || 0;
+                    return d3.time.format("%Y-%m-%d")(new Date(dx))
+                });
+
+                chart.y1Axis
+                        .tickFormat(d3.format(',f'));
+
+                chart.y2Axis
+                        .tickFormat(d3.format(',f'));
+
+                chart.bars.forceY([0]);
+                chart.lines.forceY([0]);
+
+                d3.select('#chart svg')
+                        .datum(data)
+                        .transition()
+                        .duration(0)
+                        .call(chart);
+
+                nv.utils.windowResize(chart.update);
+
+                return chart;
+            });
+
+        });
+    }
+
+    var redrawGraph = function (url, resolution) {
+        $("#chart svg").empty();
+        d3.json(url, function (error, data) {
+            nv.addGraph(function () {
+                var chart = nv.models.linePlusBarChart()
+                        .margin({top: 30, right: 60, bottom: 50, left: 70})
+                        //We can set x data accessor to use index. Reason? So the bars all appear evenly spaced.
+                        .x(function (d, i) {
+                            return i
+                        })
+                        .y(function (d, i) {
+                            return d[1]
+                        })
+                        ;
 
 
-d3.json("http://ff-proj.cs.nccu.edu.tw/~jeffy/ffToolbar/test-pdo.php",function(error,data) {
-  nv.addGraph(function() {
-      var chart = nv.models.linePlusBarChart()
-            .margin({top: 30, right: 60, bottom: 50, left: 70})
-            //We can set x data accessor to use index. Reason? So the bars all appear evenly spaced.
-            .x(function(d,i) { return i })
-            .y(function(d,i) {return d[1] })
-            ;
+                chart.xAxis.tickFormat(function (d) {
+                    var dx = data[0].values[d] && data[0].values[d][0] || 0;
+                    if (resolution === "per-day") {
+                        return d3.time.format("%Y-%m-%d")(new Date(dx));
+                    } else if (resolution === "per-hour") {
+                        return d3.time.format("%Y-%m-%d %H:00")(new Date(dx));
+                    }
 
-      chart.xAxis.tickFormat(function(d) {
-        var dx = data[0].values[d] && data[0].values[d][0] || 0;
-        return d3.time.format("%Y-%m-%d")(new Date(dx))
-      });
+                });
 
-      chart.y1Axis
-          .tickFormat(d3.format(',f'));
+                chart.y1Axis
+                        .tickFormat(d3.format(',f'));
 
-      chart.y2Axis
-          .tickFormat(d3.format(',f'));
+                chart.y2Axis
+                        .tickFormat(d3.format(',f'));
 
-      chart.bars.forceY([0]);
-      chart.lines.forceY([0]);
+                chart.bars.forceY([0]);
+                chart.lines.forceY([0]);
 
-      d3.select('#chart svg')
-        .datum(data)
-        .transition()
-        .duration(0)
-        .call(chart);
+                d3.select('#chart svg')
+                        .datum(data)
+                        .transition()
+                        .duration(0)
+                        .call(chart);
 
-      nv.utils.windowResize(chart.update);
+                nv.utils.windowResize(chart.update);
 
-      return chart;
-  });
+                return chart;
+            });
 
+        });
+    }
+
+//    initGraph("http://ff-proj.cs.nccu.edu.tw/~jeffy/ffToolbar/test-pdo.php");
+
+    $(":button").click(function () {
+        var ds_name = $("span[name='dataset']").text();
+        var bday = $("input[name='startday']").val();
+        var eday = $("input[name='endday']").val();
+        var res = $("input[name='resolution']:checked").val();
+        var base_url = "http://ff-proj.cs.nccu.edu.tw/~jeffy/ffToolbar/ajax_url_freq.php?" +
+                "ds=" + ds_name + "&bd=" + bday + "&ed=" + eday + "&res=" + res;
+        redrawGraph(base_url, res);
+    });
 });

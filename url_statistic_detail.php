@@ -76,7 +76,7 @@ try {
                 <!-- Include Side file -->
                 <?php include_once './sidebar.php'; ?>
                 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-                    <h1 class="page-header">DataSet: <?php echo $strDataset; ?></h1>
+                    <h1 class="page-header">DataSet: <span name="dataset"><?php echo $strDataset; ?></span></h1>
 
                     <div class="row">
                         <div class="col-md-6">
@@ -105,9 +105,9 @@ try {
                                             <label for="duration" class="col-sm-2 control-label">Duration</label>
                                             <div class="col-sm-10">
                                                 <div class="input-daterange input-group" id="datepicker">
-                                                    <input type="text" class="input-sm form-control" name="start" />
+                                                    <input type="text" class="input-sm form-control" name="startday" value="<?php echo date("Y-m-d", strtotime($aryStatus['duration']['begin'])); ?>" />
                                                     <span class="input-group-addon">to</span>
-                                                    <input type="text" class="input-sm form-control" name="end" />
+                                                    <input type="text" class="input-sm form-control" name="endday" value="<?php echo date("Y-m-d", strtotime($aryStatus['duration']['end'])); ?>" />
                                                 </div>
                                             </div>
                                         </div>
@@ -115,16 +115,16 @@ try {
                                             <label for="resolution" class="col-sm-2 control-label">Resolution</label>
                                             <div class="col-sm-10">
                                                 <label class="radio-inline">
-                                                    <input type="radio" name="resolution" id="perdays" value="option1"> days
+                                                    <input type="radio" name="resolution" id="perdays" value="per-day" checked="checked"> days
                                                 </label>
                                                 <label class="radio-inline">
-                                                    <input type="radio" name="resolution" id="perhours" value="option1"> hours
+                                                    <input type="radio" name="resolution" id="perhours" value="per-hour"> hours
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <div class="col-sm-offset-2 col-sm-10">
-                                                <button type="submit" class="btn btn-default">Update</button>
+                                                <button type="submit" name="update" class="btn btn-default">Update</button>
                                             </div>
                                         </div>
                                     </form>
