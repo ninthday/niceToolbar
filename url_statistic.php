@@ -20,6 +20,9 @@ if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
 
 require_once _APP_PATH . 'classes/myPDOConn.Class.php';
 require_once _APP_PATH . 'classes/URLStatistic.Class.php';
+
+// 設定側邊目錄使用
+$strNavOp = 'url-base';
 ?>
 
 <!DOCTYPE html>
@@ -126,7 +129,7 @@ require_once _APP_PATH . 'classes/URLStatistic.Class.php';
                                 foreach ($aryStatus as $row) {
                                     echo '<tr>';
                                     echo '<td>' . $i . '.</td>';
-                                    echo '<td>' . $row['table_name'] . '</td>';
+                                    echo '<td><a href="url_statistic_detail.php?ds=' . $row['table_name'] . '">' . $row['table_name'] . '</a></td>';
                                     echo '<td>' . $row['duration']['begin'] . '</td>';
                                     echo '<td>' . $row['duration']['end'] . '</td>';
                                     echo '<td class="text-right">' . number_format($row['basic']['total']) . '</td>';

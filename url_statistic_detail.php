@@ -30,6 +30,9 @@ try {
 } catch (\Exception $exc) {
     echo $exc->getMessage();
 }
+
+// 設定側邊目錄使用
+$strNavOp = 'url-base';
 ?>
 
 <!DOCTYPE html>
