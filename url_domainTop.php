@@ -44,7 +44,7 @@ $strNavOp = 'url-base';
         <title><?php echo _WEB_NAME ?></title>
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-
+        
         <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 
         <!-- Custom styles for this template -->
@@ -135,56 +135,12 @@ $strNavOp = 'url-base';
                             </div>
                         </div>
                     </div>
-                    <h2 class="sub-header">Statistic</h2>
-                    <div role="tabpanel">
-                        <!-- Nav tabs -->
-                        <ul class="nav nav-tabs" role="tablist">
-                            <li role="presentation" class="active"><a href="#basic" aria-controls="basic" role="tab" data-toggle="tab">Basic</a></li>
-                            <li role="presentation"><a href="#topdomain" aria-controls="topdomain" role="tab" data-toggle="tab">Top-30-Domains</a></li>
-                            <li role="presentation"><a href="#topurl" aria-controls="topurl" role="tab" data-toggle="tab">Top-30-Urls</a></li>
-                        </ul>
-                        <!-- Tab panes -->
-                        <div class="tab-content">
-                            <div role="tabpanel" class="tab-pane active in fade" id="basic">
-                                <div id="chart">
-                                    <svg></svg>
-                                </div>
-                            </div>
-                            <div role="tabpanel" class="tab-pane fade" id="topdomain">
-                                <div class="col-md-3">
-                                    <table id="dnlist" class="table table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Domain</th>
-                                                <th>Count</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody></tbody>
-                                    </table>
-                                </div>
-                                <div class="col-md-9"></div>
-                            </div>
-                            <div role="tabpanel" class="tab-pane fade" id="topurl">
-                                <div class="col-md-3">
-                                    <table id="urllist" class="table table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>URL</th>
-                                                <th>Count</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody></tbody>
-                                    </table>
-                                </div>
-                                <div class="col-md-9"></div>
-                            </div>
-                        </div>
-                    </div>
+                    <h2 class="sub-header">Basic statistic</h2>
                     <div class="row">
                         <div class="col-md-12">
-
+                            <div id="chart">
+                                <svg></svg>
+                            </div>
                         </div>
                     </div>
                 </div>

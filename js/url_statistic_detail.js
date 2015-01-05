@@ -49,7 +49,7 @@ $(document).ready(function () {
             });
 
         });
-    }
+    };
 
     var redrawGraph = function (url, resolution) {
         $("#chart svg").empty();
@@ -98,8 +98,38 @@ $(document).ready(function () {
             });
 
         });
-    }
+    };
 
+    var showList = function (dataset, bday, eday) {
+        $.ajaxSetup({
+            cache: false
+        });
+
+        var jqxhr = $.getJSON('ajax_top_domain.php', {
+            ds: dataset,
+            bd: bday,
+            ed: eday
+        });
+
+        jqxhr.success(function (data) {
+            if (data.rsStat) {
+                buildList(data.rsContents);
+            } else {
+                showErrorMsg(data.rsContents);
+            }
+        });
+    };
+    var buildList = function (aryLists) {
+        var strList = '';
+        for (var i = 0; i < aryLists.length; i++) {
+            strList += '<tr><td>' + (i+1).toString() + '.</td>';
+            strList += '<td>' + aryLists[i].domain + '</td>';
+            strList += '<td>' + aryLists[i].CNT + '</td></tr>';
+        }
+        
+        $("#dnlist tbody").children().remove();
+        $("#dnlist tbody").append(strList);
+    };
 //    initGraph("http://ff-proj.cs.nccu.edu.tw/~jeffy/ffToolbar/test-pdo.php");
 
     $(":button").click(function () {
@@ -110,5 +140,6 @@ $(document).ready(function () {
         var base_url = "http://ff-proj.cs.nccu.edu.tw/~jeffy/ffToolbar/ajax_url_freq.php?" +
                 "ds=" + ds_name + "&bd=" + bday + "&ed=" + eday + "&res=" + res;
         redrawGraph(base_url, res);
+        showList(ds_name, bday, eday);
     });
 });
