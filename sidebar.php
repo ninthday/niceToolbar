@@ -16,8 +16,6 @@ $subNav = $aryNav[1];
         case 'url':
             echo ($subNav == 'base')?'<li class="active"><a href="#">':'<li><a href="url_statistic.php">';
             echo 'Basic Statistic</a></li>';
-            echo ($subNav == 'topn')?'<li class="active"><a href="#">':'<li><a href="url_domainTop.php">';
-            echo 'Top 10 Domain</a></li>';
             break;
 
         default:

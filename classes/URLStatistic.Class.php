@@ -253,6 +253,66 @@ class URLStatistic
         
         return $aryRtn;
     }
+    
+    /**
+     * 取得指定時間內前N名的 URL 和數量統計
+     * 
+     * @param string $strTableName 資料集名稱
+     * @param string $strBeginDay 資料區間開始日期（yyyy-mm-dd）
+     * @param string $strEndDay 資料區間結束日期（yyyy-mm-dd）
+     * @param int $intTop 前 N 筆資料
+     * @return array
+     * @throws \Exception
+     */
+    public function getTopURLs($strTableName, $strBeginDay, $strEndDay, $intTop)
+    {
+        $aryRtn = array();
+        $sql = "SELECT `url_followed`, COUNT(*) AS `CNT` FROM `" . $strTableName . "_urls` " .
+                "WHERE `error_code` LIKE '2%' AND `created_at` > '" . $strBeginDay . " 00:00:00' AND `created_at` <= '" . $strEndDay . " 23:59:59' " . 
+                "GROUP BY `url_followed` ORDER BY `CNT` DESC Limit 0, " . $intTop;
+
+        try {
+            $stmt = $this->dbh->prepare($sql);
+            $stmt->execute();
+            while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+                array_push($aryRtn, $row);
+            }
+        } catch (\PDOException $exc) {
+            throw new \Exception($exc->getMessage());
+        }
+        
+        return $aryRtn;
+    }
+    
+    /**
+     * 取得指定時間內前N名的發文者和數量統計
+     * 
+     * @param string $strTableName
+     * @param string $strBeginDay
+     * @param string $strEndDay
+     * @param int $intTop
+     * @return array
+     * @throws \Exception
+     */
+    public function getTopPoster($strTableName, $strBeginDay, $strEndDay, $intTop)
+    {
+        $aryRtn = array();
+        $sql = "SELECT `from_user_name`, COUNT(*) AS `CNT` FROM `" . $strTableName . "_urls` " .
+                "WHERE `error_code` LIKE '2%' AND `created_at` > '" . $strBeginDay . " 00:00:00' AND `created_at` <= '" . $strEndDay . " 23:59:59' " . 
+                "GROUP BY `from_user_name` ORDER BY `CNT` DESC Limit 0, " . $intTop;
+
+        try {
+            $stmt = $this->dbh->prepare($sql);
+            $stmt->execute();
+            while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+                array_push($aryRtn, $row);
+            }
+        } catch (\PDOException $exc) {
+            throw new \Exception($exc->getMessage());
+        }
+        
+        return $aryRtn;
+    }
 
     /**
      * 取得指定資料表最早和最晚一筆的時間

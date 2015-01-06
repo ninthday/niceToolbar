@@ -142,6 +142,7 @@ $strNavOp = 'url-base';
                             <li role="presentation" class="active"><a href="#basic" aria-controls="basic" role="tab" data-toggle="tab">Basic</a></li>
                             <li role="presentation"><a href="#topdomain" aria-controls="topdomain" role="tab" data-toggle="tab">Top-30-Domains</a></li>
                             <li role="presentation"><a href="#topurl" aria-controls="topurl" role="tab" data-toggle="tab">Top-30-Urls</a></li>
+                            <li role="presentation"><a href="#topposter" aria-controls="topposter" role="tab" data-toggle="tab">Top-30-Posters</a></li>
                         </ul>
                         <!-- Tab panes -->
                         <div class="tab-content">
@@ -172,6 +173,21 @@ $strNavOp = 'url-base';
                                             <tr>
                                                 <th>#</th>
                                                 <th>URL</th>
+                                                <th>Count</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                                <div class="col-md-9"></div>
+                            </div>
+                            <div role="tabpanel" class="tab-pane fade" id="topposter">
+                                <div class="col-md-3">
+                                    <table id="ptlist" class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Poster</th>
                                                 <th>Count</th>
                                             </tr>
                                         </thead>

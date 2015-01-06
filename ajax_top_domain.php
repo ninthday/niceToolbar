@@ -10,7 +10,8 @@ $strBeginDay = filter_input(INPUT_GET, 'bd', FILTER_SANITIZE_STRING);
 $strEndDay = filter_input(INPUT_GET, 'ed', FILTER_SANITIZE_STRING);
 
 if (!$strDataset || !$strBeginDay || !$strEndDay) {
-    echo "The parameter has problem!";
+    $aryResult['rsStat'] = false;
+    $aryResult['rsContents'] =  "The parameter has problem!";
 }
 
 try {
