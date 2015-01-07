@@ -206,7 +206,10 @@ $strNavOp = 'url-base';
                 </div>
             </div>
         </div>
-
+        <div id="alert-message" class="alert alert-warning alert-dismissible" role="alert" style="display: none;">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <span id="alert-content"></span>
+        </div>
         <!-- Bootstrap core JavaScript
         ================================================== -->
         <!-- Placed at the end of the document so the pages load faster -->
@@ -225,6 +228,7 @@ $strNavOp = 'url-base';
         </script>
         <script src="resources/d3/d3.min.js"></script>
         <script src="resources/d3/nv.d3.min.js"></script>
+        <script src="js/main.js"></script>
         <script src="js/url_statistic_detail.js"></script>
     </body>
 </html>

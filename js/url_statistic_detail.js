@@ -111,27 +111,27 @@ $(document).ready(function () {
             ed: eday
         });
 
-        jqxhr.success(function (data) {
+        jqxhr.done(function (data) {
             if (data.rsStat) {
                 buildDomainList(data.rsContents);
             } else {
-                showErrorMsg(data.rsContents);
+                showMessage('danger', data.rsContents);
             }
         });
     };
-    
+
     var buildDomainList = function (aryLists) {
         var strList = '';
         for (var i = 0; i < aryLists.length; i++) {
-            strList += '<tr><td>' + (i+1).toString() + '.</td>';
+            strList += '<tr><td>' + (i + 1).toString() + '.</td>';
             strList += '<td>' + aryLists[i].domain + '</td>';
             strList += '<td>' + aryLists[i].CNT + '</td></tr>';
         }
-        
+
         $("#dnlist tbody").children().remove();
         $("#dnlist tbody").append(strList);
     };
-    
+
     var showURLList = function (dataset, bday, eday) {
         $.ajaxSetup({
             cache: false
@@ -148,23 +148,23 @@ $(document).ready(function () {
             if (data.rsStat) {
                 buildURLList(data.rsContents);
             } else {
-                showErrorMsg(data.rsContents);
+                showMessage('danger', data.rsContents);
             }
         });
     };
-    
+
     var buildURLList = function (aryLists) {
         var strList = '';
         for (var i = 0; i < aryLists.length; i++) {
-            strList += '<tr><td>' + (i+1).toString() + '.</td>';
+            strList += '<tr><td>' + (i + 1).toString() + '.</td>';
             strList += '<td><a href="' + aryLists[i].url_followed + '" target="_blank">' + aryLists[i].url_followed + '</a></td>';
             strList += '<td>' + aryLists[i].CNT + '</td></tr>';
         }
-        
+
         $("#urllist tbody").children().remove();
         $("#urllist tbody").append(strList);
     };
-    
+
     var showPosterList = function (dataset, bday, eday) {
         $.ajaxSetup({
             cache: false
@@ -181,23 +181,23 @@ $(document).ready(function () {
             if (data.rsStat) {
                 buildPosterList(data.rsContents);
             } else {
-                showErrorMsg(data.rsContents);
+                showMessage('danger', data.rsContents);
             }
         });
     };
-    
+
     var buildPosterList = function (aryLists) {
         var strList = '';
         for (var i = 0; i < aryLists.length; i++) {
-            strList += '<tr><td>' + (i+1).toString() + '.</td>';
+            strList += '<tr><td>' + (i + 1).toString() + '.</td>';
             strList += '<td><a href="https://twitter.com/' + aryLists[i].from_user_name + '" target="_blank">' + aryLists[i].from_user_name + '</a></td>';
             strList += '<td>' + aryLists[i].CNT + '</td></tr>';
         }
-        
+
         $("#ptlist tbody").children().remove();
         $("#ptlist tbody").append(strList);
     };
-    
+
 //    initGraph("http://ff-proj.cs.nccu.edu.tw/~jeffy/ffToolbar/test-pdo.php");
 
     $(":button").click(function () {
@@ -211,5 +211,6 @@ $(document).ready(function () {
         showDomainList(ds_name, bday, eday);
         showURLList(ds_name, bday, eday);
         showPosterList(ds_name, bday, eday);
+        showMessage('success', 'Time Scope of dataset has been updated.');
     });
 });
