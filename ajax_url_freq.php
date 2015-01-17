@@ -30,7 +30,6 @@ try {
     $aryStatus = array(
         array(
             "key" => "Users",
-            "bar" => true,
             "color" => "#9CC4E4",
             "values" => $aryUsers
         ),

@@ -55,14 +55,14 @@ $(document).ready(function () {
         $("#chart svg").empty();
         d3.json(url, function (error, data) {
             nv.addGraph(function () {
-                var chart = nv.models.linePlusBarChart()
+                var chart = nv.models.lineChart()
                         .margin({top: 30, right: 60, bottom: 50, left: 70})
                         //We can set x data accessor to use index. Reason? So the bars all appear evenly spaced.
                         .x(function (d, i) {
-                            return i
+                            return i;
                         })
                         .y(function (d, i) {
-                            return d[1]
+                            return d[1];
                         })
                         ;
 
@@ -76,15 +76,12 @@ $(document).ready(function () {
                     }
 
                 });
-
-                chart.y1Axis
+            
+                chart.yAxis
                         .tickFormat(d3.format(',f'));
 
-                chart.y2Axis
-                        .tickFormat(d3.format(',f'));
 
-                chart.bars.forceY([0]);
-                chart.lines.forceY([0]);
+                chart.forceY([0]);
 
                 d3.select('#chart svg')
                         .datum(data)
